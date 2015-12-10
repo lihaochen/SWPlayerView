@@ -1,0 +1,24 @@
+//
+//  PrefixHeader.pch
+//  TestVideo
+//
+//  Created by BryanLi on 15/12/9.
+//  Copyright © 2015年 mac. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#define MOVIE_URL1 @"http://gslb.miaopai.com/stream/w1yD9FrgECUwteDPB2QCIA__.mp4?yx=&refer=weibo_app"
+#define MOVIE_URL2 @"http://gslb.miaopai.com/stream/sGnq3oFp~eCr3l4TA29hAw__.mp4?yx=&refer=weibo_app"
+#define WINDOW ((AppDelegate *)([UIApplication sharedApplication].delegate)).window
+
+#import <MediaPlayer/MediaPlayer.h>
+#import <Masonry.h>
+#import "AppDelegate.h"
+#import "UIViewController+StatusBarForPlayerViewController.h"
+
+#endif /* PrefixHeader_pch */
