@@ -12,7 +12,7 @@
 
 - (void)awakeFromNib {
     
-    
+    [self.playerView.player changeAudioWithFloat:0];
 }
 
 

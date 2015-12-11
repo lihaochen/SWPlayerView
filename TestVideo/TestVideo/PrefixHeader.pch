@@ -14,11 +14,8 @@
 
 #define MOVIE_URL1 @"http://gslb.miaopai.com/stream/w1yD9FrgECUwteDPB2QCIA__.mp4?yx=&refer=weibo_app"
 #define MOVIE_URL2 @"http://gslb.miaopai.com/stream/sGnq3oFp~eCr3l4TA29hAw__.mp4?yx=&refer=weibo_app"
-#define WINDOW ((AppDelegate *)([UIApplication sharedApplication].delegate)).window
 
-#import <MediaPlayer/MediaPlayer.h>
 #import <Masonry.h>
-#import "AppDelegate.h"
 #import "UIViewController+StatusBarForPlayerViewController.h"
 
 #endif /* PrefixHeader_pch */

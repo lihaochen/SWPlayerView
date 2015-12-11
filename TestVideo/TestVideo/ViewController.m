@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AVKit/AVKit.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import "MainViewController.h"
 
 @interface ViewController () <AVPlayerViewControllerDelegate>
 
@@ -24,13 +25,26 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(push)];
+    [self.view addGestureRecognizer:tapGesture];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)push
 {
-//    [self performSelector:@selector(pushVideo) withObject:nil afterDelay:0];
-    [self pushVideo];
+    if (self.navigationController) {
+        [self.navigationController pushViewController:[[MainViewController alloc] init] animated:YES];
+    } else {
+        [self presentViewController:[[MainViewController alloc] init] animated:YES completion:nil];
+    }
+    
 }
+
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//    [self performSelector:@selector(pushVideo) withObject:nil afterDelay:0];
+//    [self pushVideo];
+//}
 
 - (void)pushVideo
 {
@@ -189,6 +203,15 @@
 - (void)playerViewController:(AVPlayerViewController *)playerViewController restoreUserInterfaceForPictureInPictureStopWithCompletionHandler:(void (^)(BOOL restored))completionHandler
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+//    if (self.navigationController) {
+//        [self.navigationController pushViewController:[[MainViewController alloc] init] animated:YES];
+//    } else {
+//        [self presentViewController:[[MainViewController alloc] init] animated:YES completion:nil];
+//    }
 }
 
 @end

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7E8F5D2C2FB48601B0A4819B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA0F1782F57BABCE73F652E /* libPods.a */; };
+		935D7DB21C1A745E00BCF821 /* AVPlayer+SWPlayerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 935D7DB11C1A745E00BCF821 /* AVPlayer+SWPlayerControl.m */; };
 		937E86581C197BF2001998D1 /* PlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 937E86521C197BF2001998D1 /* PlayerView.m */; };
 		937E86591C197BF2001998D1 /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937E86541C197BF2001998D1 /* PlayerViewController.m */; };
 		937E865A1C197BF2001998D1 /* PlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 937E86551C197BF2001998D1 /* PlayerViewController.xib */; };
@@ -15,6 +16,9 @@
 		937E865E1C197C38001998D1 /* btn_play_large@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 937E865D1C197C38001998D1 /* btn_play_large@2X.png */; };
 		9388A1501C191CAF0004706B /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9388A14F1C191CAF0004706B /* TestView.m */; };
 		9388A1521C191CB90004706B /* TestView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9388A1511C191CB90004706B /* TestView.xib */; };
+		93947EF21C1ADCFE0026E291 /* PAUSE@3X.png in Resources */ = {isa = PBXBuildFile; fileRef = 93947EEF1C1ADCFE0026E291 /* PAUSE@3X.png */; };
+		93947EF31C1ADCFE0026E291 /* PLAY@3X.png in Resources */ = {isa = PBXBuildFile; fileRef = 93947EF01C1ADCFE0026E291 /* PLAY@3X.png */; };
+		93947EF41C1ADCFE0026E291 /* RECORD@3X.png in Resources */ = {isa = PBXBuildFile; fileRef = 93947EF11C1ADCFE0026E291 /* RECORD@3X.png */; };
 		93B90BAD1C16D35B0017B228 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B90BAC1C16D35B0017B228 /* main.m */; };
 		93B90BB01C16D35B0017B228 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B90BAF1C16D35B0017B228 /* AppDelegate.m */; };
 		93B90BB31C16D35B0017B228 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B90BB21C16D35B0017B228 /* ViewController.m */; };
@@ -51,6 +55,8 @@
 		1447B305A30F2A9D25091784 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		1CA0F1782F57BABCE73F652E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CD8F1E7B0408E5A8BFEB05A /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		935D7DB01C1A745E00BCF821 /* AVPlayer+SWPlayerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVPlayer+SWPlayerControl.h"; sourceTree = "<group>"; };
+		935D7DB11C1A745E00BCF821 /* AVPlayer+SWPlayerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVPlayer+SWPlayerControl.m"; sourceTree = "<group>"; };
 		937E86511C197BF2001998D1 /* PlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerView.h; sourceTree = "<group>"; };
 		937E86521C197BF2001998D1 /* PlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerView.m; sourceTree = "<group>"; };
 		937E86531C197BF2001998D1 /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
@@ -62,6 +68,9 @@
 		9388A14E1C191CAF0004706B /* TestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestView.h; sourceTree = "<group>"; };
 		9388A14F1C191CAF0004706B /* TestView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestView.m; sourceTree = "<group>"; };
 		9388A1511C191CB90004706B /* TestView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestView.xib; sourceTree = "<group>"; };
+		93947EEF1C1ADCFE0026E291 /* PAUSE@3X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PAUSE@3X.png"; sourceTree = "<group>"; };
+		93947EF01C1ADCFE0026E291 /* PLAY@3X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PLAY@3X.png"; sourceTree = "<group>"; };
+		93947EF11C1ADCFE0026E291 /* RECORD@3X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RECORD@3X.png"; sourceTree = "<group>"; };
 		93B90BA81C16D35B0017B228 /* TestVideo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestVideo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93B90BAC1C16D35B0017B228 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		93B90BAE1C16D35B0017B228 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -139,6 +148,8 @@
 				937E865C1C197C38001998D1 /* Resources */,
 				937E86511C197BF2001998D1 /* PlayerView.h */,
 				937E86521C197BF2001998D1 /* PlayerView.m */,
+				935D7DB01C1A745E00BCF821 /* AVPlayer+SWPlayerControl.h */,
+				935D7DB11C1A745E00BCF821 /* AVPlayer+SWPlayerControl.m */,
 				937E86531C197BF2001998D1 /* PlayerViewController.h */,
 				937E86541C197BF2001998D1 /* PlayerViewController.m */,
 				937E86551C197BF2001998D1 /* PlayerViewController.xib */,
@@ -152,6 +163,9 @@
 			isa = PBXGroup;
 			children = (
 				937E865D1C197C38001998D1 /* btn_play_large@2X.png */,
+				93947EEF1C1ADCFE0026E291 /* PAUSE@3X.png */,
+				93947EF01C1ADCFE0026E291 /* PLAY@3X.png */,
+				93947EF11C1ADCFE0026E291 /* RECORD@3X.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -346,12 +360,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93947EF41C1ADCFE0026E291 /* RECORD@3X.png in Resources */,
+				93947EF21C1ADCFE0026E291 /* PAUSE@3X.png in Resources */,
 				93B90BBB1C16D35B0017B228 /* LaunchScreen.storyboard in Resources */,
 				937E865A1C197BF2001998D1 /* PlayerViewController.xib in Resources */,
 				93B90C891C1826FB0017B228 /* TableViewCell.xib in Resources */,
 				93B90BB81C16D35B0017B228 /* Assets.xcassets in Resources */,
 				937E865E1C197C38001998D1 /* btn_play_large@2X.png in Resources */,
 				93B90BB61C16D35B0017B228 /* Main.storyboard in Resources */,
+				93947EF31C1ADCFE0026E291 /* PLAY@3X.png in Resources */,
 				9388A1521C191CB90004706B /* TestView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -428,6 +445,7 @@
 				9388A1501C191CAF0004706B /* TestView.m in Sources */,
 				937E86581C197BF2001998D1 /* PlayerView.m in Sources */,
 				93B90BB31C16D35B0017B228 /* ViewController.m in Sources */,
+				935D7DB21C1A745E00BCF821 /* AVPlayer+SWPlayerControl.m in Sources */,
 				93B90C881C1826FB0017B228 /* TableViewCell.m in Sources */,
 				93B90BB01C16D35B0017B228 /* AppDelegate.m in Sources */,
 				937E86591C197BF2001998D1 /* PlayerViewController.m in Sources */,

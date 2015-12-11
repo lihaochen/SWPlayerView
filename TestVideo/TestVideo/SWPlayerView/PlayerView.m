@@ -9,8 +9,12 @@
 #import "PlayerView.h"
 
 @interface PlayerView ()
+{
+    BOOL isFirst;
+}
 
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIImageView *playIdentityView;
+
 
 @end
 
@@ -27,7 +31,8 @@
 
 - (void)awakeFromNib
 {
-    [self imageView];
+    self.backgroundColor = [UIColor blackColor];
+    [self playIdentityView];
     AVPlayerLayer *layer = (AVPlayerLayer *)self.layer;
     layer.videoGravity = AVLayerVideoGravityResizeAspect;
     [self addTarget:self action:@selector(clicked) forControlEvents:UIControlEventTouchUpInside];
@@ -54,43 +59,76 @@
 }
 
 - (void)setPlayer:(AVPlayer *)player {
+    isFirst = YES;
+    
     [self.player removeObserver:self forKeyPath:@"status"];
+    [self.player removeObserver:self forKeyPath:@"playState"];
+//    NSDictionary *observerInfo = self.player.observationInfo;
+    
     self.status = self.player.status;
+    self.playState = self.player.playState;
+    
+    // 改变player后
     [player addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+    [player addObserver:self forKeyPath:@"playState" options:NSKeyValueObservingOptionNew context:nil];
+    [player addObserver:self forKeyPath:@"rate" options:NSKeyValueObservingOptionNew context:nil];
+    
+    // 设置新player
     [(AVPlayerLayer *)[self layer] setPlayer:player];
 }
 
-#pragma mark - 播放标识
-- (UIImageView *)imageView
+- (void)setPlayState:(SWPlayerControlState)playState
 {
-    if (!_imageView) {
-        _imageView = ({
+    _playState = playState;
+    if (playState == SWPlayerControlStatePlay) {
+        self.playIdentityView.hidden = YES;
+    } else {
+        self.playIdentityView.hidden = NO;
+    }
+}
+
+#pragma mark - 播放标识
+- (UIImageView *)playIdentityView
+{
+    if (!_playIdentityView) {
+        _playIdentityView = ({
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
             imageView.image = [UIImage imageNamed:@"btn_play_large@2X"];
             imageView.center = CGPointMake(CGRectGetWidth(self.bounds)/2.f, CGRectGetHeight(self.bounds)/2.f);
             imageView.hidden = YES;
+            imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
             [self addSubview:imageView];
             imageView;
         });
     }
-    return _imageView;
+    return _playIdentityView;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"status"]) {
         self.status = [(AVPlayer *)object status];
-        NSLog(@"%ld", self.status);
-        if (self.status == AVPlayerStatusReadyToPlay) {
-            self.imageView.hidden = NO;
-            [self.player pause];
+        if (isFirst) {
+            self.playIdentityView.hidden = NO;
+            [self.player sw_pause];
+        }
+    } else if ([keyPath isEqualToString:@"playState"]) {
+        self.playState = self.player.playState;
+    } else if ([keyPath isEqualToString:@"rate"]) {
+        if (self.player.rate == 0 && self.player.playState == SWPlayerControlStatePlay) {
+            // loading
+            
         }
     }
 }
 
+
+    
 - (void)dealloc
 {
     [self.player removeObserver:self forKeyPath:@"status"];
+    [self.player removeObserver:self forKeyPath:@"playState"];
+//    [self.player removeTimeObserver:self];
 }
 
 @end

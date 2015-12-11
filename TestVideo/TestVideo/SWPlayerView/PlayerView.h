@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "AVPlayer+SWPlayerControl.h"
 
 @interface PlayerView : UIControl
 
 @property (nonatomic, strong) AVPlayer *player;
-@property (assign, nonatomic) AVPlayerStatus status;
+@property (nonatomic, assign) AVPlayerStatus status;
+@property (nonatomic, assign) SWPlayerControlState playState;
 
 @property (nonatomic, copy) void(^clickedBlock)(AVPlayer *player, PlayerView *playerView);
 

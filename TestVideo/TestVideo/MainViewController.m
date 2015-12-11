@@ -45,6 +45,21 @@
 //        [playerViewController showInViewController:weakSelf playerView:playerView];
 //    }];
     // colorSenseRainbow
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.frame = CGRectMake(0, 0, 64, 64);
+    [button setTitle:@"back" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
+}
+
+- (void)buttonPressed:(UIButton *)sender
+{
+    if (self.navigationController) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - Table view data source
@@ -65,7 +80,7 @@
     [cell.playerView.player play];
     __weak typeof(self) weakSelf = self;
     [cell.playerView setClickedBlock:^(AVPlayer *player, PlayerView *playerView) {
-        PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+        PlayerViewController *playerViewController = [PlayerViewController sharePlayerViewController];
         playerViewController.player = player;
         [playerViewController showInViewController:weakSelf playerView:playerView];
     }];
@@ -133,19 +148,42 @@
 }
 */
 
-- (BOOL)shouldAutorotate
-{
-    return NO;
-}
+//- (UIStatusBarStyle)preferredStatusBarStyle
+//{
+//    return UIStatusBarStyleDefault;
+//}
+//
+//- (BOOL)prefersStatusBarHidden
+//{
+//    return NO;
+//}
+//
+//- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
+//{
+//    return UIStatusBarAnimationSlide;
+//}
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
-    return (UIInterfaceOrientationMaskAll);
-}
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
+//- (BOOL)shouldAutorotate
+//{
+//    return YES;
+//}
+//
+//- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+//{
+//    return (UIInterfaceOrientationMaskAll);
+//}
+//
+//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+//{
+//    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+//}
+
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//    });
+//}
 
 @end

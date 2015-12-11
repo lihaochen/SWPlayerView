@@ -17,6 +17,11 @@
 {
     return self.sw_isHiddenStatusBar;
 }
+
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
+{
+    return UIStatusBarAnimationSlide;
+}
 #pragma clang diagnostic pop
 
 - (BOOL)sw_isHiddenStatusBar

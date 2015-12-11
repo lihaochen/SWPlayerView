@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet PlayerView *playerView;
 @property (nonatomic, strong) AVPlayer *player;
 
++ (instancetype)sharePlayerViewController;
 - (void)showInViewController:(UIViewController *)viewController playerView:(PlayerView *)playerView;
 
 @end
