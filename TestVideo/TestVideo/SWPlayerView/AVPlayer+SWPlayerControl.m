@@ -59,7 +59,7 @@
     [self pause];
 //    [self removeTimeObserver:self];
     
-    self.playState = SWPlayerControlStatestop;
+    self.playState = SWPlayerControlStateStop;
     [self.currentItem.asset cancelLoading];
 }
 

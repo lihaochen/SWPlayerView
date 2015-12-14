@@ -6,9 +6,9 @@
 //  Copyright © 2015年 mac. All rights reserved.
 //
 
-#import "PlayerView.h"
+#import "SWPlayerView.h"
 
-@interface PlayerView ()
+@interface SWPlayerView ()
 {
     BOOL isFirst;
 }
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation PlayerView
+@implementation SWPlayerView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -63,7 +63,12 @@
     
     [self.player removeObserver:self forKeyPath:@"status"];
     [self.player removeObserver:self forKeyPath:@"playState"];
+    [self.player removeObserver:self forKeyPath:@"rate"];
 //    NSDictionary *observerInfo = self.player.observationInfo;
+    
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+//    [self.player.currentItem setCanUseNetworkResourcesForLiveStreamingWhilePaused:YES];
     
     self.status = self.player.status;
     self.playState = self.player.playState;
@@ -115,9 +120,13 @@
     } else if ([keyPath isEqualToString:@"playState"]) {
         self.playState = self.player.playState;
     } else if ([keyPath isEqualToString:@"rate"]) {
+        CGFloat totalTime = CMTimeGetSeconds(self.player.currentItem.duration);
+        CGFloat nowTime = (CGFloat)self.player.currentItem.currentTime.value/self.player.currentItem.currentTime.timescale;
         if (self.player.rate == 0 && self.player.playState == SWPlayerControlStatePlay) {
             // loading
             
+        } else if (totalTime == nowTime) {
+            self.player.playState = SWPlayerControlStateStop;
         }
     }
 }
@@ -128,6 +137,7 @@
 {
     [self.player removeObserver:self forKeyPath:@"status"];
     [self.player removeObserver:self forKeyPath:@"playState"];
+    [self.player removeObserver:self forKeyPath:@"rate"];
 //    [self.player removeTimeObserver:self];
 }
 

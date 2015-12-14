@@ -29,8 +29,8 @@
     if (!_window) {
         _window = ({
             UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-//            window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[ViewController alloc] init]];
-            window.rootViewController = [[ViewController alloc] init];
+            window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[ViewController alloc] init]];
+//            window.rootViewController = [[ViewController alloc] init];
 //            window.rootViewController = [[MainViewController alloc] init];
             window;
         });

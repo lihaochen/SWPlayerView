@@ -6,7 +6,7 @@
 //  Copyright © 2015年 mac. All rights reserved.
 //
 
-#import "PlayerViewController.h"
+#import "SWPlayerViewController.h"
 #import "AppDelegate.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "AppDelegate.h"
@@ -14,10 +14,17 @@
 
 #define WINDOW ((AppDelegate *)([UIApplication sharedApplication].delegate)).window
 #define DURATION 0.5
-@interface PlayerViewController ()
+@interface SWPlayerViewController ()
 {
     BOOL scrollEnable;  // if originViewController is scrollView need.
+    NSInteger deviceDirection;
+    CGFloat startPoint;
+    CGFloat lightValue;
+    CGFloat volumeValue;
 }
+
+@property (nonatomic, strong) MPVolumeView *volumeView;
+@property (nonatomic, strong) UISlider *volumeSlider;
 
 @property (weak, nonatomic) IBOutlet UIView *playControlView;
 @property (weak, nonatomic) IBOutlet UIButton *playbackButton;
@@ -30,20 +37,20 @@
 
 @property (nonatomic, weak) UIViewController *originViewController;
 @property (nonatomic, weak) UIViewController *real_parentViewController;
-@property (nonatomic, weak) PlayerView *originPlayerView;
+@property (nonatomic, weak) SWPlayerView *originPlayerView;
 
 @property (nonatomic, weak) void(^ timeObserverBlock)(CMTime time);
 
 @end
 
-@implementation PlayerViewController
+@implementation SWPlayerViewController
 
 + (instancetype)sharePlayerViewController
 {
-    static PlayerViewController *playerViewController = nil;
+    static SWPlayerViewController *playerViewController = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        playerViewController = [[PlayerViewController alloc] init];
+        playerViewController = [[SWPlayerViewController alloc] init];
     });
     return playerViewController;
 }
@@ -57,21 +64,27 @@
     [super viewDidLoad];
     
     [self.timeSlider setThumbImage:[UIImage imageNamed:@"RECORD@3X"] forState:UIControlStateNormal];
-    [self.timeSlider setMinimumTrackTintColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
-    [self.timeSlider setMaximumTrackTintColor:[[UIColor whiteColor] colorWithAlphaComponent:0.1]];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    [self.timeSlider setMinimumTrackTintColor:[[UIColor whiteColor] colorWithAlphaComponent:0.9]];
+    [self.timeSlider setMaximumTrackTintColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
     
     _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back)];
     [self.view addGestureRecognizer:self.tapGesture];
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
-    [self.view addGestureRecognizer:self.panGesture];
+    [self.playerView addGestureRecognizer:self.panGesture];
     UITapGestureRecognizer *barTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(barTapGesture:)];
     [self.playControlView addGestureRecognizer:barTapGesture];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    
+    [self setDeviceOrientation];
+    
+    if (self.real_parentViewController.navigationController) {
+        self.real_parentViewController.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+    
     self.playerView.player = self.player;
     // 通过设置timeObserverBlock来设置每时每刻的事件
     self.playerView.player.timeObserverBlock = self.timeObserverBlock;
@@ -90,6 +103,57 @@
     });
     
     [self.playerView.player changeAudioWithFloat:1];
+    
+    
+    [UIView animateWithDuration:DURATION delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        weakSelf.originViewController.sw_isHiddenStatusBar = YES;
+        [weakSelf.originViewController setNeedsStatusBarAppearanceUpdate];
+        weakSelf.sw_isHiddenStatusBar = YES;
+        [weakSelf setNeedsStatusBarAppearanceUpdate];
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (void)setDeviceOrientation
+{
+    if (!self.originViewController) {
+        UIDeviceOrientation orient = [UIDevice currentDevice].orientation;
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        CGRect frame;
+        CGFloat angle;
+        switch (orient)
+        {
+            case UIDeviceOrientationPortrait:
+                frame = CGRectMake(0, 0, size.width, size.height);
+                angle = 0;
+                break;
+            case UIDeviceOrientationLandscapeLeft:
+                frame = CGRectMake(0, 0, size.height, size.width);
+                angle = M_PI/2.f;
+                break;
+            case UIDeviceOrientationPortraitUpsideDown:
+                frame = CGRectMake(0, 0, size.width, size.height);
+                angle = M_PI;
+                break;
+            case UIDeviceOrientationLandscapeRight:
+                frame = CGRectMake(0, 0, size.height, size.width);
+                angle = -M_PI/2.f;
+                break;
+            default:
+                frame = CGRectMake(0, 0, size.width, size.height);
+                angle = 0;
+                break;
+        }
+        self.playerView.layer.anchorPoint = CGPointMake(0.5, 0.5);
+        
+        [UIView animateWithDuration:DURATION delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.playerView.transform = CGAffineTransformMakeRotation(angle);
+            self.playerView.bounds = frame;
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
 }
 
 - (void (^)(CMTime))timeObserverBlock
@@ -129,18 +193,127 @@
 
 - (void)setPlayer:(AVPlayer *)player
 {
+    if (_player == player) {
+        return;
+    }
     [_player sw_pause];
     _player = nil;
     _player = player;
 }
 
+- (MPVolumeView *)volumeView
+{
+    if (!_volumeView) {
+        _volumeView = ({
+            MPVolumeView *view = [[MPVolumeView alloc] init];
+            view;
+        });
+    }
+    return _volumeView;
+}
+
+- (UISlider *)volumeSlider
+{
+    if (!_volumeSlider) {
+        _volumeSlider = ({
+            UISlider *volumeSlider = nil;
+            for (UIView *view in self.volumeView.subviews) {
+                if ([view.class.description isEqualToString:@"MPVolumeSlider"]) {
+                    volumeSlider = (UISlider *)view;
+                    break;
+                }
+            }
+            volumeSlider;
+        });
+    }
+    return _volumeSlider;
+}
+
 - (void)panGesture:(UIPanGestureRecognizer *)gesture
 {
-//    CGPoint locationPoint = [gesture locationInView:self.view];
+    CGPoint locationPoint = [gesture locationInView:self.view];
     CGPoint translationPoint = [gesture translationInView:self.view];
-//    BOOL isVolume;
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        lightValue = [UIScreen mainScreen].brightness;
+        volumeValue = self.volumeSlider.value;
+        startPoint = locationPoint.y;
+    }
+    CGFloat result;
     
-    NSLog(@"%@", NSStringFromCGPoint(translationPoint));
+    switch (deviceDirection) {
+        case 1:
+        {
+            if (locationPoint.x < CGRectGetWidth([UIScreen mainScreen].bounds)/2.f) {
+                // 亮度
+                if (translationPoint.y < -10 || translationPoint.y > 10) {
+                    result = lightValue - translationPoint.y/400.f;
+                    [[UIScreen mainScreen] setBrightness:result];
+                }
+
+            } else {
+                // 声音
+                if (translationPoint.y < -10 || translationPoint.y > 10) {
+                    result = volumeValue - translationPoint.y/400.f;
+                    [self.volumeSlider setValue:result animated:YES];
+                    [self.volumeSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
+                }
+            }
+        }
+            break;
+        case 2:
+        {
+            if (locationPoint.y < CGRectGetHeight([UIScreen mainScreen].bounds)/2.f) {
+                // 亮度
+                
+            } else {
+                // 声音
+                if (translationPoint.x < -20 || translationPoint.x > 20) {
+                    result = volumeValue + translationPoint.x/[UIScreen mainScreen].bounds.size.width/2.f;
+                    [self.volumeSlider setValue:result animated:YES];
+                    [self.volumeSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
+                }
+            }
+        }
+            break;
+        case 3:
+        {
+            if (locationPoint.x > CGRectGetHeight([UIScreen mainScreen].bounds)/2.f) {
+                // 亮度
+                
+            } else {
+                // 声音
+                if (translationPoint.y < -20 || translationPoint.y > 20) {
+                    result = volumeValue + translationPoint.y/400.f;
+                    [self.volumeSlider setValue:result animated:YES];
+                    [self.volumeSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
+                }
+            }
+        }
+            break;
+        case 4:
+        {
+            if (locationPoint.y < CGRectGetWidth([UIScreen mainScreen].bounds)/2.f) {
+                // 亮度
+                
+            } else {
+                // 声音
+                if (translationPoint.x < -20 || translationPoint.x > 20) {
+                    result = volumeValue + translationPoint.x/50.f;
+                    [self.volumeSlider setValue:result animated:YES];
+                    [self.volumeSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
+                }
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    
+
+    
+    
+    
+//    NSLog(@"%@", NSStringFromCGPoint(translationPoint));
 }
 
 - (void)barTapGesture:(UITapGestureRecognizer *)gesture
@@ -194,8 +367,26 @@
 
 - (void)back
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.playerView.player changeAudioWithFloat:0];
+    
     __weak typeof(self) weakSelf = self;
+    
+    if (self.real_parentViewController.navigationController) {
+        self.real_parentViewController.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+    
+    if (!self.originViewController) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            weakSelf.playerView.transform = CGAffineTransformMakeRotation(0);
+            weakSelf.playerView.frame = [UIScreen mainScreen].bounds;
+            weakSelf.sw_isHiddenStatusBar = NO;
+            weakSelf.real_parentViewController.sw_isHiddenStatusBar = NO;
+            [weakSelf.real_parentViewController setNeedsStatusBarAppearanceUpdate];
+        }];
+        return;
+    }
+    
     [UIView animateWithDuration:DURATION delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         
         weakSelf.sw_isHiddenStatusBar = NO;
@@ -210,10 +401,12 @@
             UIScrollView *scrollView = (UIScrollView *)self.originViewController.view;
             scrollView.scrollEnabled = scrollEnable;
         }
+        self.originViewController = nil;
+        self.real_parentViewController = nil;
     }];
 }
 
-- (void)showInViewController:(UIViewController *)viewController playerView:(PlayerView *)playerView
+- (void)showInViewController:(UIViewController *)viewController playerView:(SWPlayerView *)playerView
 {
     self.originPlayerView = playerView;
     self.real_parentViewController = viewController;
@@ -222,7 +415,9 @@
     // 添加视图
     [self.originViewController addChildViewController:self];
     [self.originViewController.view addSubview:self.view];
-    
+    if (viewController.navigationController) {
+        [self viewWillAppear:YES];
+    }
     
     if ([self.originViewController.view isKindOfClass:[UIScrollView class]]) {
         UIScrollView *scrollView = (UIScrollView *)self.originViewController.view;
@@ -233,19 +428,8 @@
     
     self.playerView.frame = [playerView convertRect:playerView.bounds toView:WINDOW];
     
-    __weak typeof(viewController) blockVC = viewController;
-    __weak typeof(self) weakSelf = self;
-    [UIView animateWithDuration:DURATION delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        blockVC.sw_isHiddenStatusBar = YES;
-        [blockVC setNeedsStatusBarAppearanceUpdate];
-        weakSelf.sw_isHiddenStatusBar = YES;
-        [weakSelf setNeedsStatusBarAppearanceUpdate];
-        
-        NSNotification *notif = [[NSNotification alloc] initWithName:@"first" object:nil userInfo:nil];
-        [self orientChange:notif];
-    } completion:^(BOOL finished) {
-        
-    }];
+    NSNotification *notif = [[NSNotification alloc] initWithName:@"first" object:nil userInfo:nil];
+    [self orientChange:notif];
 }
 
 - (void)orientChange:(NSNotification *)notif
@@ -259,23 +443,28 @@
         case UIDeviceOrientationPortrait:
             frame = CGRectMake(0, 0, size.width, size.height);
             angle = 0;
+            deviceDirection = 1;
             break;
         case UIDeviceOrientationLandscapeLeft:
             frame = CGRectMake(0, 0, size.height, size.width);
             angle = M_PI/2.f;
+            deviceDirection = 2;
             break;
         case UIDeviceOrientationPortraitUpsideDown:
             frame = CGRectMake(0, 0, size.width, size.height);
             angle = M_PI;
+            deviceDirection = 3;
             break;
         case UIDeviceOrientationLandscapeRight:
             frame = CGRectMake(0, 0, size.height, size.width);
             angle = -M_PI/2.f;
+            deviceDirection = 4;
             break;
         default:
             if ([notif.name isEqualToString:@"first"]) {
                 frame = CGRectMake(0, 0, size.width, size.height);
                 angle = 0;
+                deviceDirection = 1;
             } else {
                 return;
             }
@@ -284,6 +473,7 @@
     }
     
     self.playerView.layer.anchorPoint = CGPointMake(0.5, 0.5);
+    
     
     [UIView animateWithDuration:DURATION delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.playerView.transform = CGAffineTransformMakeRotation(angle);
@@ -298,6 +488,22 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return (UIInterfaceOrientationMaskAll);
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
 
 @end
 

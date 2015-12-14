@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PlayerView.h"
+#import "SWPlayerView.h"
 
 @interface TableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet PlayerView *playerView;
+@property (weak, nonatomic) IBOutlet SWPlayerView *playerView;
 
 @end

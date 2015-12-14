@@ -10,12 +10,12 @@
 #import <AVFoundation/AVFoundation.h>
 #import "AVPlayer+SWPlayerControl.h"
 
-@interface PlayerView : UIControl
+@interface SWPlayerView : UIControl
 
 @property (nonatomic, strong) AVPlayer *player;
 @property (nonatomic, assign) AVPlayerStatus status;
 @property (nonatomic, assign) SWPlayerControlState playState;
 
-@property (nonatomic, copy) void(^clickedBlock)(AVPlayer *player, PlayerView *playerView);
+@property (nonatomic, copy) void(^clickedBlock)(AVPlayer *player, SWPlayerView *playerView);
 
 @end

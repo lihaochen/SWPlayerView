@@ -11,7 +11,7 @@
 typedef enum {
     SWPlayerControlStatePause,
     SWPlayerControlStatePlay,
-    SWPlayerControlStatestop
+    SWPlayerControlStateStop
 } SWPlayerControlState;
 
 @interface AVPlayer (SWPlayerControl)

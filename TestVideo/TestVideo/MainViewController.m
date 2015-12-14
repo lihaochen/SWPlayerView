@@ -8,7 +8,7 @@
 
 #import "MainViewController.h"
 #import "TableViewCell.h"
-#import "PlayerViewController.h"
+#import "SWPlayerViewController.h"
 #import "TestView.h"
 
 @interface MainViewController ()
@@ -79,10 +79,11 @@
     cell.playerView.player = [AVPlayer playerWithURL:[NSURL URLWithString:urlString]];
     [cell.playerView.player play];
     __weak typeof(self) weakSelf = self;
-    [cell.playerView setClickedBlock:^(AVPlayer *player, PlayerView *playerView) {
-        PlayerViewController *playerViewController = [PlayerViewController sharePlayerViewController];
+    [cell.playerView setClickedBlock:^(AVPlayer *player, SWPlayerView *playerView) {
+        SWPlayerViewController *playerViewController = [SWPlayerViewController sharePlayerViewController];
         playerViewController.player = player;
         [playerViewController showInViewController:weakSelf playerView:playerView];
+//        [weakSelf presentViewController:playerViewController animated:YES completion:nil];
     }];
 
     
@@ -164,20 +165,20 @@
 //}
 
 
-//- (BOOL)shouldAutorotate
-//{
-//    return YES;
-//}
-//
-//- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-//{
-//    return (UIInterfaceOrientationMaskAll);
-//}
-//
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-//{
-//    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-//}
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return (UIInterfaceOrientationMaskAll);
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
 
 //- (void)viewDidAppear:(BOOL)animated
 //{

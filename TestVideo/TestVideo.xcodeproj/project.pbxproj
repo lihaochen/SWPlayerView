@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		7E8F5D2C2FB48601B0A4819B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA0F1782F57BABCE73F652E /* libPods.a */; };
 		935D7DB21C1A745E00BCF821 /* AVPlayer+SWPlayerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 935D7DB11C1A745E00BCF821 /* AVPlayer+SWPlayerControl.m */; };
-		937E86581C197BF2001998D1 /* PlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 937E86521C197BF2001998D1 /* PlayerView.m */; };
-		937E86591C197BF2001998D1 /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937E86541C197BF2001998D1 /* PlayerViewController.m */; };
-		937E865A1C197BF2001998D1 /* PlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 937E86551C197BF2001998D1 /* PlayerViewController.xib */; };
+		937E86581C197BF2001998D1 /* SWPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 937E86521C197BF2001998D1 /* SWPlayerView.m */; };
+		937E86591C197BF2001998D1 /* SWPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937E86541C197BF2001998D1 /* SWPlayerViewController.m */; };
+		937E865A1C197BF2001998D1 /* SWPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 937E86551C197BF2001998D1 /* SWPlayerViewController.xib */; };
 		937E865B1C197BF2001998D1 /* UIViewController+StatusBarForPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937E86571C197BF2001998D1 /* UIViewController+StatusBarForPlayerViewController.m */; };
 		937E865E1C197C38001998D1 /* btn_play_large@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 937E865D1C197C38001998D1 /* btn_play_large@2X.png */; };
 		9388A1501C191CAF0004706B /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9388A14F1C191CAF0004706B /* TestView.m */; };
@@ -57,11 +57,11 @@
 		4CD8F1E7B0408E5A8BFEB05A /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		935D7DB01C1A745E00BCF821 /* AVPlayer+SWPlayerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVPlayer+SWPlayerControl.h"; sourceTree = "<group>"; };
 		935D7DB11C1A745E00BCF821 /* AVPlayer+SWPlayerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVPlayer+SWPlayerControl.m"; sourceTree = "<group>"; };
-		937E86511C197BF2001998D1 /* PlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerView.h; sourceTree = "<group>"; };
-		937E86521C197BF2001998D1 /* PlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerView.m; sourceTree = "<group>"; };
-		937E86531C197BF2001998D1 /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
-		937E86541C197BF2001998D1 /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
-		937E86551C197BF2001998D1 /* PlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayerViewController.xib; sourceTree = "<group>"; };
+		937E86511C197BF2001998D1 /* SWPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWPlayerView.h; sourceTree = "<group>"; };
+		937E86521C197BF2001998D1 /* SWPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWPlayerView.m; sourceTree = "<group>"; };
+		937E86531C197BF2001998D1 /* SWPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWPlayerViewController.h; sourceTree = "<group>"; };
+		937E86541C197BF2001998D1 /* SWPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWPlayerViewController.m; sourceTree = "<group>"; };
+		937E86551C197BF2001998D1 /* SWPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SWPlayerViewController.xib; sourceTree = "<group>"; };
 		937E86561C197BF2001998D1 /* UIViewController+StatusBarForPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+StatusBarForPlayerViewController.h"; sourceTree = "<group>"; };
 		937E86571C197BF2001998D1 /* UIViewController+StatusBarForPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+StatusBarForPlayerViewController.m"; sourceTree = "<group>"; };
 		937E865D1C197C38001998D1 /* btn_play_large@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_play_large@2X.png"; sourceTree = "<group>"; };
@@ -146,13 +146,13 @@
 			isa = PBXGroup;
 			children = (
 				937E865C1C197C38001998D1 /* Resources */,
-				937E86511C197BF2001998D1 /* PlayerView.h */,
-				937E86521C197BF2001998D1 /* PlayerView.m */,
+				937E86511C197BF2001998D1 /* SWPlayerView.h */,
+				937E86521C197BF2001998D1 /* SWPlayerView.m */,
 				935D7DB01C1A745E00BCF821 /* AVPlayer+SWPlayerControl.h */,
 				935D7DB11C1A745E00BCF821 /* AVPlayer+SWPlayerControl.m */,
-				937E86531C197BF2001998D1 /* PlayerViewController.h */,
-				937E86541C197BF2001998D1 /* PlayerViewController.m */,
-				937E86551C197BF2001998D1 /* PlayerViewController.xib */,
+				937E86531C197BF2001998D1 /* SWPlayerViewController.h */,
+				937E86541C197BF2001998D1 /* SWPlayerViewController.m */,
+				937E86551C197BF2001998D1 /* SWPlayerViewController.xib */,
 				937E86561C197BF2001998D1 /* UIViewController+StatusBarForPlayerViewController.h */,
 				937E86571C197BF2001998D1 /* UIViewController+StatusBarForPlayerViewController.m */,
 			);
@@ -363,7 +363,7 @@
 				93947EF41C1ADCFE0026E291 /* RECORD@3X.png in Resources */,
 				93947EF21C1ADCFE0026E291 /* PAUSE@3X.png in Resources */,
 				93B90BBB1C16D35B0017B228 /* LaunchScreen.storyboard in Resources */,
-				937E865A1C197BF2001998D1 /* PlayerViewController.xib in Resources */,
+				937E865A1C197BF2001998D1 /* SWPlayerViewController.xib in Resources */,
 				93B90C891C1826FB0017B228 /* TableViewCell.xib in Resources */,
 				93B90BB81C16D35B0017B228 /* Assets.xcassets in Resources */,
 				937E865E1C197C38001998D1 /* btn_play_large@2X.png in Resources */,
@@ -443,12 +443,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				9388A1501C191CAF0004706B /* TestView.m in Sources */,
-				937E86581C197BF2001998D1 /* PlayerView.m in Sources */,
+				937E86581C197BF2001998D1 /* SWPlayerView.m in Sources */,
 				93B90BB31C16D35B0017B228 /* ViewController.m in Sources */,
 				935D7DB21C1A745E00BCF821 /* AVPlayer+SWPlayerControl.m in Sources */,
 				93B90C881C1826FB0017B228 /* TableViewCell.m in Sources */,
 				93B90BB01C16D35B0017B228 /* AppDelegate.m in Sources */,
-				937E86591C197BF2001998D1 /* PlayerViewController.m in Sources */,
+				937E86591C197BF2001998D1 /* SWPlayerViewController.m in Sources */,
 				93B90BAD1C16D35B0017B228 /* main.m in Sources */,
 				937E865B1C197BF2001998D1 /* UIViewController+StatusBarForPlayerViewController.m in Sources */,
 				93B90C811C1825480017B228 /* MainViewController.m in Sources */,
