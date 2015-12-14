@@ -17,6 +17,7 @@
 @interface SWPlayerViewController ()
 {
     BOOL scrollEnable;  // if originViewController is scrollView need.
+    CGPoint locationPoint;
     NSInteger deviceDirection;
     CGFloat startPoint;
     CGFloat lightValue;
@@ -31,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *timeSlider;
 @property (weak, nonatomic) IBOutlet UILabel *startLabel;
 @property (weak, nonatomic) IBOutlet UILabel *endLabel;
+@property (strong, nonatomic) UIProgressView *progressView;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
@@ -64,8 +66,9 @@
     [super viewDidLoad];
     
     [self.timeSlider setThumbImage:[UIImage imageNamed:@"RECORD@3X"] forState:UIControlStateNormal];
-    [self.timeSlider setMinimumTrackTintColor:[[UIColor whiteColor] colorWithAlphaComponent:0.9]];
-    [self.timeSlider setMaximumTrackTintColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
+    [self.timeSlider setMinimumTrackTintColor:[UIColor whiteColor]];
+    [self.timeSlider setMaximumTrackTintColor:[UIColor clearColor]];
+    self.timeSlider.value = 0;
     
     _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back)];
     [self.view addGestureRecognizer:self.tapGesture];
@@ -73,6 +76,11 @@
     [self.playerView addGestureRecognizer:self.panGesture];
     UITapGestureRecognizer *barTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(barTapGesture:)];
     [self.playControlView addGestureRecognizer:barTapGesture];
+    
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        NSLog(@"%@", self.timeSlider.subviews);
+//    });
+    [self.timeSlider addSubview:self.progressView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -191,8 +199,27 @@
     return resultString;
 }
 
+- (UIProgressView *)progressView
+{
+    if (!_progressView) {
+        _progressView = ({
+            UIProgressView *view = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+            view.bounds = CGRectMake(0, 0, CGRectGetWidth(self.timeSlider.frame)-4, 3);
+            view.center = CGPointMake(CGRectGetWidth(self.timeSlider.bounds)/2.f, CGRectGetHeight(self.timeSlider.bounds)/2.f);
+            view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
+            // 后面段
+            view.trackTintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.3];
+            // 前面段
+            view.progressTintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+            view;
+        });
+    }
+    return _progressView;
+}
+
 - (void)setPlayer:(AVPlayer *)player
 {
+    [player.currentItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
     if (_player == player) {
         return;
     }
@@ -229,17 +256,42 @@
     return _volumeSlider;
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"loadedTimeRanges"]) {
+        
+        NSArray *array = [self.player.currentItem loadedTimeRanges];
+        //获取范围i
+        CMTimeRange range = [array.firstObject CMTimeRangeValue];
+        //从哪儿开始的
+        CGFloat start = CMTimeGetSeconds(range.start);
+        //缓存了多少
+        CGFloat duration = CMTimeGetSeconds(range.duration);
+        //一共缓存了多少
+        CGFloat allCache = start+duration;
+        NSLog(@"缓存了多少数据：%f",allCache);
+        
+        //设置缓存的百分比
+        CMTime allTime = [self.player.currentItem duration];
+        //转换
+        CGFloat time = CMTimeGetSeconds(allTime);
+        CGFloat y = allCache/time;
+        NSLog(@"缓存百分比：--------%f",y);
+        [self.timeSlider sendSubviewToBack:self.progressView];
+        self.progressView.progress = y;
+    }
+}
+
 - (void)panGesture:(UIPanGestureRecognizer *)gesture
 {
-    CGPoint locationPoint = [gesture locationInView:self.view];
     CGPoint translationPoint = [gesture translationInView:self.view];
     if (gesture.state == UIGestureRecognizerStateBegan) {
+        locationPoint = [gesture locationInView:self.view];
         lightValue = [UIScreen mainScreen].brightness;
         volumeValue = self.volumeSlider.value;
         startPoint = locationPoint.y;
     }
     CGFloat result;
-    
     switch (deviceDirection) {
         case 1:
         {
@@ -358,7 +410,7 @@
 - (void)hiddenPlayerControlView
 {
     __weak typeof(self) weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             weakSelf.playControlView.alpha = 0.5;
         } completion:nil];
@@ -367,6 +419,7 @@
 
 - (void)back
 {
+    [self.player.currentItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.playerView.player changeAudioWithFloat:0];
     
@@ -489,20 +542,20 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (BOOL)shouldAutorotate
-{
-    return YES;
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
-    return (UIInterfaceOrientationMaskAll);
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
+//- (BOOL)shouldAutorotate
+//{
+//    return YES;
+//}
+//
+//- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+//{
+//    return (UIInterfaceOrientationMaskAll);
+//}
+//
+//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+//{
+//    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+//}
 
 
 @end
