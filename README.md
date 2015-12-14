@@ -1,0 +1,2 @@
+#一个类似新浪微博的moviePlayerViewController
+###可以实现简单的视频播放功能和点击全屏播放。
